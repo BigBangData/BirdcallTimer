@@ -15,6 +15,7 @@
 # limitations under the License.
 
 import os
+import sys
 import html
 import time 
 import random 
@@ -27,6 +28,57 @@ import concurrent.futures as cf
 from datetime import datetime
 from tkinter import Label, Tk, Canvas, PhotoImage
 
+
+def validate_number(raw_num, typeof):
+    if typeof == "float":
+        try:
+            num = float(raw_num)
+            assert 0 <= num <= 90
+        except ValueError as e:
+            print("Error: <mins> must be an integer or float")        
+            sys.exit()
+        except AssertionError as e:
+            print("Error: <mins> must be between 0 and 90 inclusive")
+            sys.exit()
+    else:
+        try:
+            num = int(raw_num)
+            assert 1 <= num <= 10
+        except ValueError as e:
+            print("Error: <times> must be an integer")
+            exit(1)
+        except AssertionError as e:
+            print("Error: <times> must be between 1 and 10 inclusive")
+            exit(1)
+     
+    return num
+
+    
+def check_args():
+    
+    # error types
+    no_args=f"Error: must supply three arguments\nUsage:\n\
+    $ python app.py <first_action (sit, stand)> <mins1> <mins2> <times>"
+    
+    arg1="Error: <first_action> must be either 'sit' or 'stand'"
+    
+    # not 4 arguments 
+    if len(sys.argv) != 5:
+        print(no_args)
+        sys.exit()
+    # first arg not "sit" nor "stand"
+    elif sys.argv[1].lower() not in ["sit", "stand"]:
+        print(arg1)
+        sys.exit()
+    # validate number args
+    else:
+        first_action = sys.argv[1]
+        mins1 = validate_number(sys.argv[2], "float")
+        mins2 = validate_number(sys.argv[3], "float")
+        times = validate_number(sys.argv[4], "int")
+        
+    return first_action, mins1, mins2, times
+
     
 def get_time():
     """Get the date and time."""
@@ -38,11 +90,11 @@ def get_time():
 def get_info(rand):
     """Returns info for a specific recording.
     
-    Params
+    Params:
     ------
     rand -- a random integer for the wave files
     
-    Info
+    Info:
     -----
     XCode -- specific code, append to https://xeno-canto.org 
              to get specific recording 
@@ -131,7 +183,7 @@ def play_audio(info, rwave):
     
     # while len(data) > 0:
     # rather: for 10 secs
-    while time.time() - T1 < 2:
+    while time.time() - T1 < 10:
         stream.write(data)
         data = wf.readframes(chunk)
     
@@ -181,6 +233,9 @@ def move_user(direction):
         
 
 if __name__ == '__main__':
+    
+    # check args
+    first_action, mins1, mins2, times = check_args()
 
     # read metadata
     df = pd.read_csv(os.path.join("config", "metadata.csv"))
@@ -192,82 +247,63 @@ if __name__ == '__main__':
         for wav in os.listdir(os.path.join(wav_dir, subdir)):
             waves.append(os.path.join(wav_dir, subdir, wav))
             codes.append(wav.split('.')[0][2:])
-                
-    # get user input  
-    raw_username = input("What do I call you? ")
-    raw_sit_min = input("Set sitting minutes: ")
-    raw_stand_min = input("Set standing minutes: ")
-    raw_times = input("How many times? ")
-    
-    # escape html
-    username = html.escape(raw_username)
-    sit_min = html.escape(raw_sit_min)
-    stand_min = html.escape(raw_stand_min)
-    times = html.escape(raw_times)    
-
-    # validate user data
-    username = str(username)
-    
-    try:
-        assert 1 <= len(username) <= 25
-    except AssertionError as e:
-        print("Error: 'username' must be at least 1 and at most 25 characters long.")
-        exit(1)
-
-    try:
-        sit_min = float(raw_sit_min)
-        assert 0 <= sit_min <= 90
-    except ValueError as e:
-        print("Error: 'sit_min' must be an integer or float.")        
-        exit(1)
-    except AssertionError as e:
-        print("Error: 'sit_min' must be between 0 and 90 inclusive.")
-        exit(1)
-       
-    try:
-        stand_min = float(raw_stand_min)
-        assert 0 <= stand_min <= 60
-    except ValueError as e:
-        print("Error: 'stand_min' must be an integer or float.")
-        exit(1)
-    except AssertionError as e:
-        print("Error: 'stand_min' must be between 0 and 60 inclusive.")
-        exit(1)
-    
-    try:
-        times = int(raw_times)
-        assert 1 <= times <= 10
-    except ValueError as e:
-        print("Error: 'times' must be an integer.")
-        exit(1)
-    except AssertionError as e:
-        print("Error: 'times' must be between 1 and 10 inclusive.")
-        exit(1)          
         
-    # calculate secs
-    sit_sec = float(sit_min)*60
-    stand_sec = float(stand_min)*60
+    # escape html --- add to check_args
+    #username = html.escape(raw_username)
+    #sit_min = html.escape(raw_sit_min)
+    #stand_min = html.escape(raw_stand_min)
+    #times = html.escape(raw_times)    
 
-    # start work session
-    print(f'\nThank you {username}, your wish is my command.')
-    print("Please have a seat.\n")
+    # validate usernname
+    #username = str(username)
+    #try:
+    #    assert 1 <= len(username) <= 25
+    #except AssertionError as e:
+    #    print("Error: 'username' must be at least 1 and at most 25 characters long.")
+    #    sys.exit(1)
+
+    # set sitting vs standing mins
+    if first_action == "sit":
+        sit_min = mins1
+        stand_min = mins2
+    else:
+        stand_min = mins1
+        sit_min = mins2
     
+    # calculate secs
+    sit_sec = sit_min*60
+    stand_sec = stand_min*60
+    
+    # start work session
+    print(f'\nThank you, your wish is my command.\nPlease {first_action}.\n')
     day, start_time = get_time()
     print(f'Day: {day}')
     print(f'Start time: {start_time}\n')
-    time.sleep(sit_sec)
     
-    # repeat 'times' times...
+    if first_action == "sit":
+        time.sleep(sit_sec)
+    else:
+        time.sleep(stand_sec)
+    
+    # repeat 'times' times
     for i in range(times):
         if i+1 == times:
-            move_user('up')
+            if first_action == "sit":
+                move_user('up')
+            else:
+                move_user('down')                
         else:
-            move_user('up')
-            move_user('down')
-            
+            if first_action == "sit":            
+                move_user('up')
+                move_user('down')
+            else:
+                move_user('down')
+                move_user('up')
+                
     # end work session
     day, end_time = get_time()
-    msg = f'{end_time} - Excellent work all around {username}, how about that break?'
-    print(msg)  
-    # play audio, popup box	
+    msg = f'{end_time} - Excellent work all around, how about that break?'
+    print(msg)
+    
+    # play audio, popup box
     run_processes(msg)
