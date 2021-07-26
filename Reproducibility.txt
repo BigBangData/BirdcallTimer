@@ -1,0 +1,15 @@
+# create virtual environment
+conda create -n py38 python=3.8
+conda activate py38  
+
+# install packages
+# note: jupyter is not needed for the timer, just for analysis
+conda install pyaudio
+conda install pandas
+conda install jupyter
+pip install wave
+pip install tk 
+
+# create spec file for easy reproducibility
+conda list --explicit > spec-file.txt
+conda deactivate
