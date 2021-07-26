@@ -18,7 +18,7 @@ import os
 import sys
 import html
 import time 
-import random 
+import random
 
 import wave
 import pyaudio
@@ -35,7 +35,7 @@ def validate_number(raw_num, typeof):
             num = float(raw_num)
             assert 0 <= num <= 90
         except ValueError as e:
-            print("Error: <mins> must be an integer or float")        
+            print("Error: <mins> must be an integer or float")
             sys.exit()
         except AssertionError as e:
             print("Error: <mins> must be between 0 and 90 inclusive")
@@ -50,10 +50,10 @@ def validate_number(raw_num, typeof):
         except AssertionError as e:
             print("Error: <times> must be between 1 and 10 inclusive")
             exit(1)
-     
+
     return num
 
-    
+
 def check_args():
     
     # error types
@@ -61,9 +61,9 @@ def check_args():
 $ bash run.sh <(sit, stand)> <mins (0-90)> <mins (0-90) \
 <times (1-10)>\nExample: bash run.sh sit 45 10 3\n\
          (sit first, sit 45 mins, stand 10 mins, 3 times)"
-    
+
     arg1="Error: <first_action> must be either 'sit' or 'stand'"
-    
+
     # not 4 arguments 
     if len(sys.argv) != 5:
         print(no_args)
@@ -87,7 +87,7 @@ def get_time():
     dt_object = datetime.fromtimestamp(time.time())
     d, t = str(dt_object).split('.')[0].split(' ')
     return d, t
-    
+
 
 def get_info(rand):
     """Returns info for a specific recording.
@@ -138,21 +138,23 @@ def display_popup(msg, info):
     prompt = '\n'.join([msg, info])
     label = Label(root, text=prompt, width=len(msg))
     canvas = Canvas(root, width=500, height=400, bg='black')
-    label.pack()
-    canvas.pack()
-
-    img = PhotoImage(file="img/siskin.png")
-    canvas.create_image(250, 200, image=img)
-
+    label.pack(); canvas.pack()
+	
+	# grab image and display at the topmost layer 
+    pic = PhotoImage(file="img/siskin.png")
+    canvas.create_image(250, 200, image=pic)
+    root.attributes("-topmost", True)
+	
+	# destroy image...
     def popup_box():
         root.destroy()
 
-    # 6 secs
+    # ...after 6 secs
     root.attributes("-topmost", True)
     root.after(6000, popup_box)
     root.mainloop()
-    
-    
+
+
 def play_audio(info, rwave):
     """Play a bird call for 10 seconds.
     
@@ -165,7 +167,7 @@ def play_audio(info, rwave):
     print(info)
 
     chunk = 1024
-    
+
     wf = wave.open(rwave, 'rb')
 
     # instantiate PyAudio
@@ -185,7 +187,7 @@ def play_audio(info, rwave):
     
     # while len(data) > 0:
     # rather: for 10 secs
-    while time.time() - T1 < 10:
+    while time.time() - T1 < 1:
         stream.write(data)
         data = wf.readframes(chunk)
     
