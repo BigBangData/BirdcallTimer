@@ -94,6 +94,7 @@ def display_popup(msg, info):
         root.destroy()
 
     # 6 secs
+    root.attributes("-topmost", True)
     root.after(6000, popup_box)
     root.mainloop()
     
@@ -130,7 +131,7 @@ def play_audio(info, rwave):
     
     # while len(data) > 0:
     # rather: for 10 secs
-    while time.time() - T1 < 10:
+    while time.time() - T1 < 2:
         stream.write(data)
         data = wf.readframes(chunk)
     
@@ -182,7 +183,7 @@ def move_user(direction):
 if __name__ == '__main__':
 
     # read metadata
-    df = pd.read_csv(os.path.join("metadata.csv"))
+    df = pd.read_csv(os.path.join("config", "metadata.csv"))
 
     wav_dir = os.path.join("audio", "wav")
     waves, codes = [], []
