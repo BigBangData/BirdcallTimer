@@ -58,7 +58,9 @@ def check_args():
     
     # error types
     no_args=f"Error: must supply three arguments\nUsage:\n\
-    $ python app.py <first_action (sit, stand)> <mins1> <mins2> <times>"
+$ bash run.sh <(sit, stand)> <mins (0-90)> <mins (0-90) \
+<times (1-10)>\nExample: bash run.sh sit 45 10 3\n\
+         (sit first, sit 45 mins, stand 10 mins, 3 times)"
     
     arg1="Error: <first_action> must be either 'sit' or 'stand'"
     
