@@ -1,0 +1,8 @@
+# Byte-compiled / optimized / DLL files
+venv/			# Exclude virtual env if any
+/__pycache__/	# Exclude the whole folder
+*.py[cod]		# Will match .pyc, .pyo and .pyd files 
+*$py.class
+.ipynb_checkpoints/*
+kaggle_eda/*
+audio/*
