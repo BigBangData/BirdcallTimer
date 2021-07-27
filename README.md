@@ -143,9 +143,17 @@ For images, the following metadata must be entered in the `csv/pic_metadata.csv`
 - **url**: the Macaulay Library URL, Ex: https://macaulaylibrary.org/asset/357081241
 - **copyright**: the photographer's full name for the copyright notice 
 
-IMPORTANT 
+### Final Notes 
 
 The `csv/chosen.csv` file contains the **XCodes** for recordings chosen to be randomly selected by the timer script. As a final step, the numeric portion of this catalogue number (Ex. for `XC315598`, the `315598` part) must be entered in this file.
+
+To reproduce the `py38` python 3.8 environment for this project, issue:
+
+```bash
+$ conda create --name py38 --file spec-file.txt
+```
+
+If this fails, follow step-by-step instructions in `Reproducibility.txt`.
 
 ---
 
