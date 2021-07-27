@@ -1,0 +1,4 @@
+Add acknowledgments - xeno-canto, etc.
+Add image info from pic_metadata
+Fix multiprocessing
+Finish README

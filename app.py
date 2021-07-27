@@ -109,21 +109,26 @@ def get_info(rand):
     rwave = waves[rand]
     rcode = codes[rand]
     rdf = df[df['xc_id'] == int(rcode)]
+    rix = rdf.index[0]
 
-    ebird_code = rdf['ebird_code'][rdf.index[0]]
-    bird_species = rdf['species'][rdf.index[0]]
-    rec_date = rdf['date'][rdf.index[0]]
-    country = rdf['country'][rdf.index[0]]
-
+    ebird_code = rdf['ebird_code'][rix]
+    bird_species = rdf['species'][rix]
+    rec_date = rdf['date'][rix]
+    country = rdf['country'][rix]
     info = f'\nXCode: {rcode}\nEbird Code: {ebird_code}\nBird Species: {bird_species}\
 \nRecorded On: {rec_date}\nRecorded In: {country}\n'
-    
-    return info, rwave
+
+    rebird = pic_df['ebird_code'] == ebird_code
+    rurl = pic_df['url'][rebird].values[0]
+    rcopy = pic_df['copyright'][rebird].values[0]
+    pic_info = f'\n{rurl}\n(c) {rcopy}\n'
+
+    return info, rwave, pic_info
 
 
-def display_popup(msg, info):
+def display_popup(msg, info, pic_info):
     """Display a self-destructing popup msg."
-    
+
     Args:
     -----
     msg -- time, stand or sit message
@@ -135,7 +140,7 @@ def display_popup(msg, info):
     root = Tk()
     
     # prepare prompt
-    prompt = '\n'.join([msg, info])
+    prompt = '\n'.join([msg, info, pic_info])
     label = Label(root, text=prompt, width=len(msg))
     canvas = Canvas(root, width=480, height=320, bg='black')
     label.pack(); canvas.pack()
@@ -209,11 +214,11 @@ def run_processes(msg):
     TODO: make it work, not simultaneous so far... 
     """
     rand = random.randint(1, len(waves)-1)
-    info, rwave = get_info(rand)
+    info, rwave, pic_info = get_info(rand)
     
     with cf.ThreadPoolExecutor(max_workers=2) as executor:
         p1 = executor.submit(play_audio(info, rwave), None, None)
-        p2 = executor.submit(display_popup(msg, info), None, None)
+        p2 = executor.submit(display_popup(msg, info, pic_info), None, None)
         
         
 def move_user(direction):
@@ -247,6 +252,7 @@ if __name__ == '__main__':
 
     # read metadata
     df = pd.read_csv(os.path.join("config", "metadata.csv"))
+    pic_df = pd.read_csv(os.path.join("config", "pic_metadata.csv"))
 
     wav_dir = os.path.join("audio", "wav")
     waves, codes = [], []
