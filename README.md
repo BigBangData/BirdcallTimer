@@ -45,18 +45,13 @@ A brief demo of the timer with dummy (fast) times - unfortunately, it misses the
 
 `TODO: EXPAND`
 
-### Data
-
-I downloaded the audio and metadata from the Kaggle machine-learning competition [Cornell Birdcall Identification](https://www.kaggle.com/c/birdsong-recognition).
-
-Originally intended for... `TODO: EXPAND`
-
-
 ---
 
-## Limitations and Future Steps
+## Acknowledgments
 
-`TODO: EXPAND`
+I'm indebted to the **xeno-canto project** ([www.xeno-canto.org](https://www.xeno-canto.org/)) and the [Macaulay Library](https://macaulaylibrary.org/) at the [Cornell Lab of Ornithology](https://www.birds.cornell.edu/home) for their impressive collections of bird sounds and pictures, respectively.
+
+I downloaded bird recordings and recording metadata from the Kaggle machine-learning competition [Cornell Birdcall Identification](https://www.kaggle.com/c/birdsong-recognition). Bird pictures and picture metadata were manually obtained from the Macaulay Library.
 
 ---
 
