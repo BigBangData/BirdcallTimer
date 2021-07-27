@@ -70,7 +70,7 @@ def check_args():
 
     # error types
     no_args=f"Error: must supply three arguments\nUsage:\n\
-$ bash run.sh <(sit, stand)> <mins (0-90)> <mins (0-90) \
+$ bash run.sh <first_action {sit|stand}> <mins1 (0-90)> <mins2 (0-90)> \
 <times (1-10)>\nExample: bash run.sh sit 45 10 3\n\
          (sit first, sit 45 mins, stand 10 mins, 3 times)"
 

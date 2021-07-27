@@ -7,7 +7,7 @@
 
 ---
 
-## Background
+## [Background](#background)
 
 My partner needed a customizable timer for sitting and standing while doing her computer work at a stand-up desk. 
 
@@ -27,7 +27,7 @@ My partner discovered with triumphant glee that by using this timer to both regu
 
 ---
 
-## Demo
+## [Demo](#demo)
 
 A brief demo of the timer with dummy (fast) times - unfortunately, it misses the main feature: the birdcall!
 
@@ -35,19 +35,46 @@ A brief demo of the timer with dummy (fast) times - unfortunately, it misses the
 
 ---
 
-## Running the Timer 
+## [Running the Timer](#running-the-timer)
+
+Run the timer with the command `bash run.py`, which takes 4 arguments:
+- **first_action**: the first desired action, either `sit` or `stand`
+- **mins1**: the number of minutes for the first action
+- **mins2**: the number of minutes for the alternative action
+- **times**: the number of times the loop (action 1, action 2) will be repeated
+
+```bash
+$ bash run.py <first_action, {sit|stand}> <mins1 (float: 0-90)> <mins2 (float: 0-90)> <times (int: 1-10)>
+
+# Example:
+# Sit for 45 mins, then stand for 10 mis, repeat process 3 times
+$ bash run.py sit 45 10 3
+
+```
+
+While minutes can have decimals (float type), times has to be an integer. Minutes can only be from 0 to 90 inclusive, and times from 1 to 10 inclusive.
+
+I'm using a **bash script** instead of a **python script** to run the timer because I wanted a single command and the python program imports packages that need to be pre-installed, such as `wave` and `pyaudio`. For ease of reproducibility (see [below](#reproducibility)) I used a virtual environment that needs to be activated before running the script.
+
+A quick look at the `run.py` script shows how it calls the `python app.py` script, passing the 4 arguments to it:
+
+```bash
+#!/bin/bash
+# activate env from source
+# and run python unbuffered to print to console
+source activate py38
+python -u app.py $1 $2 $3 $4
+```
+
+---
+
+## [Reproducibility](#reproducibility)
 
 `TODO: EXPAND`
 
 ---
 
-## Reproducing the Timer 
-
-`TODO: EXPAND`
-
----
-
-## Acknowledgments
+## [Acknowledgments](#acknowledgments)
 
 I'm indebted to the **xeno-canto project** ([www.xeno-canto.org](https://www.xeno-canto.org/)) and the [Macaulay Library](https://macaulaylibrary.org/) at the [Cornell Lab of Ornithology](https://www.birds.cornell.edu/home) for their impressive collections of bird sounds and pictures, respectively.
 
