@@ -23,6 +23,7 @@ import random
 import wave
 import pyaudio
 import pandas as pd
+#import multiprocessing
 import concurrent.futures as cf
 
 from datetime import datetime
@@ -160,7 +161,7 @@ def display_popup(msg, info, pic_info):
 
     # ...after 10 secs
     root.attributes("-topmost", True)
-    root.after(10000, popup_box)
+    root.after(3000, popup_box)
     root.mainloop()
 
 
@@ -191,10 +192,12 @@ def play_audio(info, rwave):
     # read data
     data = wf.readframes(chunk)
 
-    # play stream for 10 seconds
+    # play stream
     T1 = time.time()
-	
-    while time.time() - T1 < 10:
+    
+    # while len(data) > 0:
+    # rather, for 10 secs
+    while time.time() - T1 < 3:
         stream.write(data)
         data = wf.readframes(chunk)
     
@@ -217,6 +220,20 @@ def run_procs(msg):
         p1 = executor.submit(play_audio, info, rwave)
         p2 = executor.submit(display_popup, msg, info, pic_info)
 
+
+#def run_async(msg):
+#    """Run both popup and audio processes simultaneously.
+#        Uses multiprocessing module directly.
+#    """
+#    rand = random.randint(1, len(waves)-1)
+#    info, rwave, pic_info = get_info(rand)
+#
+#    p1 = multiprocessing.Process(target=play_audio, args=(info, rwave))
+#    p2 = multiprocessing.Process(target=display_popup, args=(msg, info, pic_info))
+#
+#    p1.start(); p2.start()
+#    p1.join(); p2.join()
+
         
 def move_user(direction):
     """Message user to stand up or sit down:
@@ -231,6 +248,7 @@ def move_user(direction):
         print(msg)
         # play audio, popup box, wait 
         run_procs(msg)
+        #run_async(msg)
         time.sleep(stand_sec)       
     else:    
         # get time        
@@ -238,7 +256,8 @@ def move_user(direction):
         msg = f'{now} - That was FANTASTIC work! You may sit now.'
         print(msg)
         # play audio, popup box, wait        
-        run_procs(msg)
+        #run_procs(msg)
+        run_async
         time.sleep(sit_sec)
         
 
@@ -258,6 +277,20 @@ if __name__ == '__main__':
         for wav in os.listdir(os.path.join(wav_dir, subdir)):
             waves.append(os.path.join(wav_dir, subdir, wav))
             codes.append(wav.split('.')[0][2:])
+        
+    # escape html --- add to check_args
+    #username = html.escape(raw_username)
+    #sit_min = html.escape(raw_sit_min)
+    #stand_min = html.escape(raw_stand_min)
+    #times = html.escape(raw_times)    
+
+    # validate usernname
+    #username = str(username)
+    #try:
+    #    assert 1 <= len(username) <= 25
+    #except AssertionError as e:
+    #    print("Error: 'username' must be at least 1 and at most 25 characters long.")
+    #    sys.exit(1)
 
     # set sitting vs standing mins
     if first_action == "sit":
@@ -303,4 +336,5 @@ if __name__ == '__main__':
     print(msg)
     
     # play audio, popup box
-    run_procs(msg)
+    #run_procs(msg)
+    run_async(msg)
