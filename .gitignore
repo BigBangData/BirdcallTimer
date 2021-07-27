@@ -4,5 +4,5 @@ venv/			# Exclude virtual env if any
 *.py[cod]		# Will match .pyc, .pyo and .pyd files 
 *$py.class
 .ipynb_checkpoints/*
-kaggle_eda/*
+img/ebird/*
 audio/*
