@@ -21,15 +21,17 @@ I created a simple timer that randomly draws from a collection of birdcalls and 
 <p align="right" style="font-size: 12px">Image by <a href="https://pixabay.com/users/artrose-16042123/">Art Rose</a></p>
 
 
-*DISCLAIMER: I am not responsible for any brain damage associated with the following logic and/or joke.*
+*DISCLAIMER: I am not responsible for any brain damage associated with the following logic.*
 
-My best half discovered with triumphant glee that by hearing the birdcall **and** seeing the bird, she will have "killed two birds with one stone" - a magical metaphor my brain has yet to fully comprehend.
+My partner discovered with triumphant glee that by using this timer to both regulate her sit-stand routine **and** learn birdcalls, she will have "killed two birds with one stone"...
 
 ---
 
 ## Demo
 
-`TODO: USE GIF + bird images`
+A brief demo of the timer with dummy (fast) times - unfortunately, it misses the main feature: the birdcall!
+
+<p align="center"><img src="img/demo.gif"></p>
 
 ---
 
