@@ -137,14 +137,14 @@ def display_popup(msg, info):
     # prepare prompt
     prompt = '\n'.join([msg, info])
     label = Label(root, text=prompt, width=len(msg))
-    canvas = Canvas(root, width=500, height=400, bg='black')
+    canvas = Canvas(root, width=480, height=320, bg='black')
     label.pack(); canvas.pack()
 
     # grab image
     ebird_code = info.split(":")[2].split("\n")[0].strip()
     filepath = os.path.join("img", "ebird", ".".join([ebird_code, "png"]))
     pic = PhotoImage(file=filepath)
-    canvas.create_image(0, 0, image=pic)
+    canvas.create_image(240, 160, image=pic)
 
     # display at topmost layer 
     root.attributes("-topmost", True)
@@ -191,7 +191,7 @@ def play_audio(info, rwave):
     
     # while len(data) > 0:
     # rather: for 10 secs
-    while time.time() - T1 < 1:
+    while time.time() - T1 < 10:
         stream.write(data)
         data = wf.readframes(chunk)
     
