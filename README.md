@@ -70,13 +70,88 @@ python -u app.py $1 $2 $3 $4
 
 ## [Reproducibility](#reproducibility)
 
-`TODO: EXPAND`
+### Limitations
+
+The timer is not 100% reproducible AS IS in this repo - namely: I refrained from uploading (and redistributing) massive amounts of audio and image data. 
+
+That said, the code and metadata files are freely distributed in this repo and this section provides instructions on how to reproduce the timer.
+
+### File Structure
+
+Both audio and images need to be downloaded and stored in the `audio` and `img` folders, as shown:
+
+```
+root
+  ├ audio/
+  |   ├ mp3/
+  |   |  ├ amegfi/
+  |   |  |    ├ XC315598.mpg
+  |   |  |    ├ XC496109.mpg
+  |   |  |    ├ ...
+  |   |  |
+  |   |  ├ amerob/
+  |   |  ├ ...
+  |   |  
+  |   └ wav/
+  |      ├ amegfi/
+  |      |    ├ XC315598.wav
+  |      |    ├ XC496109.wav
+  |      |    ├ ...
+  |      |
+  |      ├ amerob/
+  |      ├ ...
+  |      
+  ├ img/
+  |  ├ ebird/
+  |  |  ├ amegfi.png
+  |  |  ├ amerob.png
+  |  |  ├ ...
+  |  |
+  |  ├ ...
+  |  └ siriema.jpg
+  |
+  ├ ...
+  ├ run.sh  
+  └ spec-file.txt
+  
+```
+
+### Details
+
+- each recording must be stored in a subfolder with the `ebird_code` abbreviation of the bird species
+- `mp3` must be converted to `wav`: I've created a python script that does this in bulk (`mp3-to-wav.py`)
+- `jpg` must be converted to `png`: I've created a python script that does this in bulk (`jpg-to-png.py`)
+- there is no need to store images under subfolders, the timer shows images at the bird-species level
+	+ this is why image names are `ebird_codes` not `XCodes` (xeno-canto catalogue # for specific recordings)
+- images are usually 480px by 320px, when that is not the case, they must be cropped to fit these dimensions
+
+Audio can be downloaded from the **xeno-canto project** (see [Acknowledgments](#acknowledgments)) and images can be downloaded from the [Macaulay Library.](https://macaulaylibrary.org/) 
+
+### Metadata
+
+If a specific recording is not in the `csv/rec_metadata.csv` file, at a minimum, the following metadata must be entered in the file:
+
+- **ebird_code**: the abbreviated species name 
+- **species**: the full species name 
+- **date**: the date of the recording 
+- **country**: the country of the recording
+- **recordist**: the recordist's full name 
+
+For images, the following metadata must be entered in the `csv/pic_metadata.csv` file:
+
+- **ebird_code**: the abbreviated species name 
+- **url**: the Macaulay Library URL, Ex: https://macaulaylibrary.org/asset/357081241
+- **copyright**: the photographer's full name for the copyright notice 
+
+IMPORTANT 
+
+The `csv/chosen.csv` file contains the **XCodes** for recordings chosen to be randomly selected by the timer script. As a final step, the numeric portion of this catalogue number (Ex. for `XC315598`, the `315598` part) must be entered in this file.
 
 ---
 
 ## [Acknowledgments](#acknowledgments)
 
-I'm indebted to the **xeno-canto project** ([www.xeno-canto.org](https://www.xeno-canto.org/)) and the [Macaulay Library](https://macaulaylibrary.org/) at the [Cornell Lab of Ornithology](https://www.birds.cornell.edu/home) for their impressive collections of bird sounds and pictures, respectively.
+I'm indebted to and grateful for the **xeno-canto project** ([www.xeno-canto.org](https://www.xeno-canto.org/)) and the [Macaulay Library](https://macaulaylibrary.org/) at the [Cornell Lab of Ornithology](https://www.birds.cornell.edu/home) for their impressive collections of bird sounds and pictures, respectively.
 
 I downloaded bird recordings and recording metadata from the Kaggle machine-learning competition [Cornell Birdcall Identification](https://www.kaggle.com/c/birdsong-recognition). Bird pictures and picture metadata were manually obtained from the Macaulay Library.
 
