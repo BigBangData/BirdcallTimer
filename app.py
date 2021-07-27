@@ -139,13 +139,17 @@ def display_popup(msg, info):
     label = Label(root, text=prompt, width=len(msg))
     canvas = Canvas(root, width=500, height=400, bg='black')
     label.pack(); canvas.pack()
-	
-	# grab image and display at the topmost layer 
-    pic = PhotoImage(file="img/siskin.png")
-    canvas.create_image(250, 200, image=pic)
+
+    # grab image
+    ebird_code = info.split(":")[2].split("\n")[0].strip()
+    filepath = os.path.join("img", "ebird", ".".join([ebird_code, "png"]))
+    pic = PhotoImage(file=filepath)
+    canvas.create_image(0, 0, image=pic)
+
+    # display at topmost layer 
     root.attributes("-topmost", True)
-	
-	# destroy image...
+
+    # destroy image...
     def popup_box():
         root.destroy()
 

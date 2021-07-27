@@ -64,6 +64,19 @@ df.iloc[:3,:13]
 df.iloc[:3,13:23]
 df.iloc[:3,23:]
 
+# convert jpg to png
+from PIL import Image
+
+path = os.path.join("img", "ebird")
+
+for img in os.listdir(path):
+    ebird_code = img.split(".")[0]
+    jpg = os.path.join(path, img)  
+    image = Image.open(jpg)  
+    png = os.path.join(path, ".".join([ebird_code, "png"]))
+    image.save(png)
+    
+
 # listen to audio in jupyter
 for subdir in os.listdir(wav_dir):
     for i, wav in enumerate(os.listdir(os.path.join(wav_dir, subdir))):
