@@ -1,3 +1,2 @@
-Add acknowledgments - xeno-canto, etc.
-Fix multiprocessing
+Add acknowledgments
 Finish README
