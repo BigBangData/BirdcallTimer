@@ -103,24 +103,25 @@ def get_time():
 
 
 def get_info(rand):
-    """Returns info for a specific recording.
+    """Returns info for a specific recording and picture.
 
     Args:
     ------
-    rand -- a random integer for the wave files
+    rand -- a random integer to retrieve a specific recording.
 
-    Info:
-    -----
-    XCode -- specific code, append to https://xeno-canto.org
-             to get specific recording
-    Ebird Code -- the abbreviated bird species code
-                  also the name of the sub directories
-    Bird Species -- the full bird species name
-    Recorded On -- date of recording
-    Recorded In -- country of recording
+
+    Output
+    ------
+    rec_info -- recording info about the bird species, ebird code,
+                xeno-canto URL, recordist's name, date, and country 
+                for a specific recording	
+    rwav_path -- the recording's wave filepath for playback
+    pic_info -- the Macaylay Library URL and copyright author 
+                for the bird species picture
+    rpic_path -- the picture's png filepath for the pop up display
 
     """
-    rwave = waves[rand]
+    rwav_path = waves[rand]
     rcode = codes[rand]
     rdf = rec_df[rec_df['xc_id'] == int(rcode)]
     rix = rdf.index[0]
@@ -131,25 +132,28 @@ def get_info(rand):
     country = rdf['country'][rix]
     recordist = rdf['recordist'][rix]
 
-    info = f'\n{bird_species} ({ebird_code})\n\
+    rec_info = f'\n{bird_species} ({ebird_code})\n\
 \nhttps://www.xeno-canto.org/{rcode}\nRecorded By \
 {recordist} on {rec_date}, {country}\n'
 
-    rebird = pic_df['ebird_code'] == ebird_code
+    rpic_path = os.path.join("img", "ebird", 
+                             ".".join([ebird_code, "png"]))
+    rebird = (pic_df['ebird_code'] == ebird_code)
     rurl = pic_df['url'][rebird].values[0]
     rcopy = pic_df['copyright'][rebird].values[0]
+
     pic_info = f'\n{rurl}\n(c) {rcopy}\n'
 
-    return info, rwave, pic_info, ebird_code
+    return rec_info, rwav_path, pic_info, rpic_path
 
 
-def display_popup(msg, info, pic_info, ebird_code):
+def display_popup(msg, rec_info, pic_info, rpic_path):
     """Display a self-destructing popup msg.
 
     Args:
     -----
-    msg -- time, stand or sit message
-    info -- basic info about the recording
+    msg -- time, plus 'stand' or 'sit' message
+    rec_info -- basic info about the recording
     pic_info -- picture attibution info
 
     """
@@ -157,14 +161,13 @@ def display_popup(msg, info, pic_info, ebird_code):
     root = Tk()
 
     # prepare prompt
-    prompt = '\n'.join([msg, info, pic_info])
+    prompt = '\n'.join([msg, rec_info, pic_info])
     label = Label(root, text=prompt)
     canvas = Canvas(root, width=480, height=320, bg='black')
     label.pack(); canvas.pack()
 
     # grab image
-    filepath = os.path.join("img", "ebird", ".".join([ebird_code, "png"]))
-    pic = PhotoImage(file=filepath)
+    pic = PhotoImage(file=rpic_path)
     canvas.create_image(240, 160, image=pic)
 
     # display at topmost layer
@@ -178,18 +181,18 @@ def display_popup(msg, info, pic_info, ebird_code):
     root.mainloop()
 
 
-def play_audio(info, rwave):
+def play_audio(rec_info, rwav_path):
     """Play a bird call for 10 seconds.
 
     Args:
     -----
-    info -- basic info about the recording
-    rwave -- random wave file path for audio playback
+    re_info -- basic info about the recording
+    rwav_path -- wave file path for audio playback
 
     """
-    print(info)
+    print(rec_info)
     # open .wav file
-    wf = wave.open(rwave, 'rb')
+    wf = wave.open(rwav_path, 'rb')
 
     # instantiate PyAudio
     p = pyaudio.PyAudio()
@@ -225,17 +228,17 @@ def run_procs(msg):
 
     """
     rand = random.randint(1, len(waves)-1)
-    info, rwave, pic_info, ebird_code = get_info(rand)
+    rec_info, rwav_path, pic_info, rpic_path = get_info(rand)
 
     with cf.ProcessPoolExecutor(max_workers=2) as executor:
-        p1 = executor.submit(play_audio, info, rwave)
-        p2 = executor.submit(display_popup, msg, info, pic_info, ebird_code)
+        p1 = executor.submit(play_audio, rec_info, rwav_path,)
+        p2 = executor.submit(display_popup, msg, rec_info, pic_info, rpic_path)
 
 
 def move_user(direction):
     """Message user to stand up or sit down:
 
-    - Plays a random birdcall to get user's attention.;
+    - Plays a random birdcall to get user's attention;
     - Pops up a dialog box with a picture of the bird,
       information about the birdsong and picture,
       and instructions to sit or stand;
