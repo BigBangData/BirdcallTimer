@@ -81,7 +81,24 @@ python -u app.py $1 $2 $3 $4
 
 The timer is not 100% reproducible AS IS in this repo - namely: I refrained from uploading (and redistributing) massive amounts of audio and image data. 
 
-That said, the code and metadata files are freely distributed in this repo and this section provides instructions on how to reproduce the timer.
+That said, the code and metadata files are freely distributed in this repo and this section provides instructions on how to reproduce the timer's data.
+
+### Reproducing the Environment
+
+If you do NOT have Python, Miniconda, and/or Git Bash installed, you must first install those. Assuming you're a Windows user:
+
+1. Download and install [Python 3.8](https://www.python.org/downloads/release/python-3810/)
+2. Download and install [Miniconda](https://docs.conda.io/en/latest/miniconda.html)
+3. Download and install [Git Bash](https://git-scm.com/download/)
+
+After cloning this repo to your local repo, to reproduce the `py38` python 3.8 virtual environment for this project, issue the following command:
+
+```bash
+$ conda create --name py38 --file spec-file.txt
+```
+
+If this fails, follow step-by-step instructions in `Reproducibility.txt` to create this environment.
+
 
 ### File Structure
 
@@ -150,17 +167,9 @@ For images, the following metadata must be entered in the `csv/pic_metadata.csv`
 - **url**: the Macaulay Library URL, Ex: https://macaulaylibrary.org/asset/357081241
 - **copyright**: the photographer's full name for the copyright notice 
 
-### Final Notes 
+### Final Step 
 
 The `csv/chosen.csv` file contains the **XCodes** for recordings chosen to be randomly selected by the timer script. As a final step, the numeric portion of this catalogue number (Ex. for `XC315598`, the `315598` part) must be entered in this file.
-
-To reproduce the `py38` python 3.8 environment for this project, issue:
-
-```bash
-$ conda create --name py38 --file spec-file.txt
-```
-
-If this fails, follow step-by-step instructions in `Reproducibility.txt`.
 
 ---
 
