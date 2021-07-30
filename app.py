@@ -68,21 +68,24 @@ def validate_number(raw_num, typeof):
 def check_args():
     """Check arguments passed to app.py script."""
 
-    # error types
-    no_args=f"Error: must supply three arguments\nUsage:\n\
- $ bash run.sh <first_action \u007bsit|stand\u007d> <mins1 (0-90)> <mins2 (0-90)>\
- <times (1-10)>\nExample: bash run.sh sit 45 10 3\n\
-         (sit first, sit 45 mins, stand 10 mins, 3 times)"
-
-    arg1="Error: <first_action> must be either 'sit' or 'stand'"
+    # arg errors
+    arg0 = "Error: must supply four arguments"
+    arg1 = "Error: <first_action> must be either 'sit' or 'stand'"
+    
+    # usage msg 
+    usage = f'Usage:\n$ bash run.sh <first_action \u007bsit|stand\u007d>\
+ <mins1 (0-90)> <mins2 (0-90)> <times (1-10)>\nExample:\n$ bash run.sh sit\
+ 45 10 3\n - sit first, sit 45 mins, stand 10 mins, 3 times'
 
     # not 4 arguments
     if len(sys.argv) != 5:
-        print(no_args)
+        print(arg0)
+        print(usage)
         sys.exit()
     # first arg not "sit" nor "stand"
     elif sys.argv[1].lower() not in ["sit", "stand"]:
         print(arg1)
+        print(usage)
         sys.exit()
     # validate number args
     else:
