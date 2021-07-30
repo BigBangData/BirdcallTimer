@@ -29,7 +29,14 @@ My partner discovered with triumphant glee that by using this timer to both regu
 
 ## [Demo](#demo)
 
-A brief demo of the timer with dummy (fast) times - unfortunately, it misses the main feature: the birdcall!
+A brief demo of the timer with dummy (fast) wait times. 
+
+The recordings in this demo can be heard in the following xeno-canto links: 
+
+- [Western Bluebird](https://xeno-canto.org/351734)
+- [Galdwall](https://xeno-canto.org/182283)
+- [Black-headed Grosbeak](https://xeno-canto.org/372614)
+- [Louisiana Waterthrush](https://xeno-canto.org/176655)
 
 <p align="center"><img src="img/demo.gif"></p>
 
