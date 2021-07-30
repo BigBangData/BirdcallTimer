@@ -163,7 +163,6 @@ def display_popup(msg, info, pic_info, ebird_code):
     label.pack(); canvas.pack()
 
     # grab image
-    #ebird_code = info.split(":")[3].split("\n\n")[0].strip()
     filepath = os.path.join("img", "ebird", ".".join([ebird_code, "png"]))
     pic = PhotoImage(file=filepath)
     canvas.create_image(240, 160, image=pic)
