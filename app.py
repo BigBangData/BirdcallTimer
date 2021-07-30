@@ -130,19 +130,20 @@ def get_info(rand):
     rec_date = rdf['date'][rix]
     country = rdf['country'][rix]
     recordist = rdf['recordist'][rix]
-    info = f'\nXeno-canto Catalogue Number: {rcode}\nEbird Code: {ebird_code}\
-\nBird Species: {bird_species}\nRecorded On: {rec_date}\
-\nRecorded In: {country}\nRecordist: {recordist}\n'
+
+    info = f'\n{bird_species} ({ebird_code})\n\
+\nhttps://www.xeno-canto.org/{rcode}\nRecorded By \
+{recordist} on {rec_date}, {country}\n'
 
     rebird = pic_df['ebird_code'] == ebird_code
     rurl = pic_df['url'][rebird].values[0]
     rcopy = pic_df['copyright'][rebird].values[0]
     pic_info = f'\n{rurl}\n(c) {rcopy}\n'
 
-    return info, rwave, pic_info
+    return info, rwave, pic_info, ebird_code
 
 
-def display_popup(msg, info, pic_info):
+def display_popup(msg, info, pic_info, ebird_code):
     """Display a self-destructing popup msg.
 
     Args:
@@ -162,7 +163,7 @@ def display_popup(msg, info, pic_info):
     label.pack(); canvas.pack()
 
     # grab image
-    ebird_code = info.split(":")[2].split("\n")[0].strip()
+    #ebird_code = info.split(":")[3].split("\n\n")[0].strip()
     filepath = os.path.join("img", "ebird", ".".join([ebird_code, "png"]))
     pic = PhotoImage(file=filepath)
     canvas.create_image(240, 160, image=pic)
@@ -225,11 +226,11 @@ def run_procs(msg):
 
     """
     rand = random.randint(1, len(waves)-1)
-    info, rwave, pic_info = get_info(rand)
+    info, rwave, pic_info, ebird_code = get_info(rand)
 
     with cf.ProcessPoolExecutor(max_workers=2) as executor:
         p1 = executor.submit(play_audio, info, rwave)
-        p2 = executor.submit(display_popup, msg, info, pic_info)
+        p2 = executor.submit(display_popup, msg, info, pic_info, ebird_code)
 
 
 def move_user(direction):
