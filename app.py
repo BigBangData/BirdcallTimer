@@ -20,12 +20,12 @@ import html
 import time
 import random
 
-import wave
-import pyaudio
 import pandas as pd
+import simpleaudio as sa
 import concurrent.futures as cf
 
 from datetime import datetime
+from pydub import AudioSegment
 from tkinter import Label, Tk, Canvas, PhotoImage
 
 
@@ -176,53 +176,30 @@ def display_popup(msg, rec_info, pic_info, rpic_path):
     # display at topmost layer
     root.attributes("-topmost", True)
 
-    # destroy image afte 10 seconds
+    # destroy image after 9 seconds
     def popup_box():
         root.destroy()
 
-    root.after(10000, popup_box)
+    root.after(9000, popup_box)
     root.mainloop()
 
 
-def play_audio(rec_info, rwav_path):
+def play_sound(rec_info, rwav_path):
     """Play a bird call for 10 seconds.
 
     Args:
     -----
-    re_info -- basic info about the recording
+    rec_info -- basic info about the recording
     rwav_path -- wave file path for audio playback
 
     """
+    # print recording info to terminal
     print(rec_info)
-    # open .wav file
-    wf = wave.open(rwav_path, 'rb')
-
-    # instantiate PyAudio
-    p = pyaudio.PyAudio()
-
-    # open stream
-    stream = p.open(format=p.get_format_from_width(wf.getsampwidth()),
-                    channels=wf.getnchannels(),
-                    rate=wf.getframerate(),
-                    output=True)
-
-    # read data
-    chunk = 1024
-    data = wf.readframes(chunk)
-
-    # play stream for 10 seconds
-    T1 = time.time()
-
-    while time.time() - T1 < 10:
-        stream.write(data)
-        data = wf.readframes(chunk)
-
-    # stop stream
-    stream.stop_stream()
-    stream.close()
-
-    # close PyAudio
-    p.terminate()
+    
+    # read wave object from file and play till done
+    wave_obj = sa.WaveObject.from_wave_file(rwav_path)
+    play_obj = wave_obj.play()
+    play_obj.wait_done()
 
 
 def run_procs(msg):
@@ -233,8 +210,14 @@ def run_procs(msg):
     rand = random.randint(1, len(waves)-1)
     rec_info, rwav_path, pic_info, rpic_path = get_info(rand)
 
+    # read in full wave file, segment to first 10s and save a _10s version
+    full_wav = AudioSegment.from_wav(rwav_path)
+    ten_secs = full_wav[:10000]
+    rwav_path_10s = ''.join([rwav_path.split('.')[0], '_10s.wav'])
+    ten_secs.export(rwav_path_10s, format="wav")
+
     with cf.ProcessPoolExecutor(max_workers=2) as executor:
-        p1 = executor.submit(play_audio, rec_info, rwav_path,)
+        p1 = executor.submit(play_sound, rec_info, rwav_path_10s,)
         p2 = executor.submit(display_popup, msg, rec_info, pic_info, rpic_path)
 
 
