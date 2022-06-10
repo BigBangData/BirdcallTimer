@@ -210,11 +210,18 @@ def run_procs(msg):
     rand = random.randint(1, len(waves)-1)
     rec_info, rwav_path, pic_info, rpic_path = get_info(rand)
 
-    # read in full wave file, segment to first 10s and save a _10s version
+    # read in full wave file
     full_wav = AudioSegment.from_wav(rwav_path)
-    ten_secs = full_wav[:10000]
-    rwav_path_10s = ''.join([rwav_path.split('.')[0], '_10s.wav'])
-    ten_secs.export(rwav_path_10s, format="wav")
+
+    test_10s = rwav_path.split('_')
+    # save a 10s version if the wave read was not already a 10s version
+    if len(test_10s) > 1:
+        ten_secs = full_wav[:10000]
+        rwav_path_10s = ''.join([rwav_path.split('.')[0], '_10s.wav'])
+        ten_secs.export(rwav_path_10s, format="wav")
+    # else use the 10s version as is
+    else:
+        rwav_path_10s = rwav_path
 
     with cf.ProcessPoolExecutor(max_workers=2) as executor:
         p1 = executor.submit(play_sound, rec_info, rwav_path_10s,)
