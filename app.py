@@ -213,13 +213,13 @@ def run_procs(msg):
     # read in full wave file
     full_wav = AudioSegment.from_wav(rwav_path)
 
-    test_10s = rwav_path.split('_')
-    # save a 10s version if the wave read was not already a 10s version
-    if len(test_10s) > 1:
+    test_10s = rwav_path.split('_10s')
+    # if the path doesn't split, it's an original file: save a 10s version
+    if len(test_10s) == 1:
         ten_secs = full_wav[:10000]
         rwav_path_10s = ''.join([rwav_path.split('.')[0], '_10s.wav'])
         ten_secs.export(rwav_path_10s, format="wav")
-    # else use the 10s version as is
+    # else the path splits, so use the 10s version as is
     else:
         rwav_path_10s = rwav_path
 
