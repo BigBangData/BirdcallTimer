@@ -106,27 +106,45 @@ def get_time():
 
 
 def get_info(rand):
-    """Returns info for a specific recording and picture.
+    """Return info for a specific, randomly chosen recording and picture
+    to be printed to the console and displayed in a pop-up dialog.
 
-    Args:
-    ------
-    rand -- a random integer to retrieve a specific recording.
+    Parameters
+    ----------
+    rand : a random integer to retrieve a specific recording.
 
+    Returns
+    -------
+    rec_info : specific recording information including: bird species,
+        ebird code, xeno-canto URL, recordist's name, date, and country.
 
-    Output
-    ------
-    rec_info -- recording info about the bird species, ebird code,
-                xeno-canto URL, recordist's name, date, and country 
-                for a specific recording	
-    rwav_path -- the recording's wave filepath for playback
-    pic_info -- the Macaylay Library URL and copyright author 
-                for the bird species picture
-    rpic_path -- the picture's png filepath for the pop up display
+    rwav_path : specific recording's wave filepath for playback.
+
+    pic_info : the Macaylay Library URL and copyright author,
+        for the bird species photo of the random recording chosen.
+
+    rpic_path : bird species png filepath for the specific photo.
+
+    Notes:
+    -----
+    The function assumes the following data is available to it.
+
+    waves : list of all available wave filepaths.
+    codes : list of all xc_id (xeno-canto IDs) for the recording info.
+    rec_df : recording dataframe with metadata.
+    pic_df : picture dataframe with metadata.
 
     """
     rwav_path = waves[rand]
     rcode = codes[rand]
-    rdf = rec_df[rec_df['xc_id'] == int(rcode)]
+    # rdf : random dataframe with specific code
+    try:
+        rdf = rec_df[rec_df['xc_id'] == int(rcode)]
+    except ValueError as e:
+        # account for case when rcode has _10s extension
+        rcode = rcode.split('_')[0]
+        rdf = rec_df[rec_df['xc_id'] == int(rcode)]
+    # random index for retrieving 
     rix = rdf.index[0]
 
     ebird_code = rdf['ebird_code'][rix]
@@ -139,12 +157,10 @@ def get_info(rand):
 \nhttps://www.xeno-canto.org/{rcode}\nRecorded By \
 {recordist} on {rec_date}, {country}\n'
 
-    rpic_path = os.path.join("img", "ebird", 
-                             ".".join([ebird_code, "png"]))
+    rpic_path = os.path.join("img", "ebird", ".".join([ebird_code, "png"]))
     rebird = (pic_df['ebird_code'] == ebird_code)
     rurl = pic_df['url'][rebird].values[0]
     rcopy = pic_df['copyright'][rebird].values[0]
-
     pic_info = f'\n{rurl}\n(c) {rcopy}\n'
 
     return rec_info, rwav_path, pic_info, rpic_path
@@ -153,11 +169,11 @@ def get_info(rand):
 def display_popup(msg, rec_info, pic_info, rpic_path):
     """Display a self-destructing popup msg.
 
-    Args:
-    -----
-    msg -- time, plus 'stand' or 'sit' message
-    rec_info -- basic info about the recording
-    pic_info -- picture attibution info
+    Parameters
+    ----------
+    msg : current time and a 'stand' or 'sit' message.
+    rec_info : basic info about the recording.
+    pic_info : picture attibution info.
 
     """
     # instantiate Tkinter
@@ -187,10 +203,10 @@ def display_popup(msg, rec_info, pic_info, rpic_path):
 def play_sound(rec_info, rwav_path):
     """Play a bird call for 10 seconds.
 
-    Args:
-    -----
-    rec_info -- basic info about the recording
-    rwav_path -- wave file path for audio playback
+    Parameters
+    ----------
+    rec_info : basic info about the recording.
+    rwav_path : wave file path for audio playback.
 
     """
     # print recording info to terminal
@@ -233,8 +249,8 @@ def move_user(direction):
 
     - Plays a random birdcall to get user's attention;
     - Pops up a dialog box with a picture of the bird,
-      information about the birdsong and picture,
-      and instructions to sit or stand;
+        information about the birdsong and picture,
+        and instructions to sit or stand;
     - Prints to console;
     - Times waiting period.
 
