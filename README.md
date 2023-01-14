@@ -1,5 +1,11 @@
 # Birdcall Timer
 
+![License](https://img.shields.io/github/license/BigBangData/BirdcallTimer)
+![File Count](https://img.shields.io/github/directory-file-count/BigBangData/BirdcallTimer)
+![Last Commit](https://img.shields.io/github/last-commit/BigBangData/BirdcallTimer?color=blueviolet)
+![Stars](https://img.shields.io/github/stars/BigBangData/BirdcallTimer?style=social)
+![Forks](https://img.shields.io/github/forks/BigBangData/BirdcallTimer?style=social)
+
 **A timer for bird lovers.**
 
 <p align="center"><img src="img/siriema.jpg" width=500></p>
@@ -11,7 +17,7 @@
 
 My partner needed a customizable timer for sitting and standing while doing her computer work at a stand-up desk. 
 
-She's also a bird-watching geek. 
+She's also a bird-watching geek (tip: use light mode goggles for this README *just this once*...)
 <p align="center"><img src="img/birdwatcher.png" width=300></p>
 <p align="right" style="font-size: 12px">Image by <a href="https://pixabay.com/users/clker-free-vector-images-3736/">Clker-Free-Vector-Images</a></p>
 
