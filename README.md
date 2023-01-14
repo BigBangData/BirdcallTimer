@@ -5,6 +5,7 @@
 ![Last Commit](https://img.shields.io/github/last-commit/BigBangData/BirdcallTimer?color=blueviolet)
 ![Stars](https://img.shields.io/github/stars/BigBangData/BirdcallTimer?style=social)
 ![Forks](https://img.shields.io/github/forks/BigBangData/BirdcallTimer?style=social)
+![Watchers](https://img.shields.io/github/watchers/BigBangData/BirdcallTimer?style=social)
 
 **A timer for bird lovers.**
 
